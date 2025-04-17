@@ -462,6 +462,8 @@
       - name: Load variables from topology file for topo_{{ topo }}.yml
         include_vars: "vars/topo_{{ topo }}.yml"
 
+      - debug: msg="topo_{{ topo }}.yml loaded, {{ ansible_host }}"
+
       - name: saved original minigraph file in SONiC DUT(ignore errors when file does not exist)
         shell: mv /etc/sonic/minigraph.xml /etc/sonic/minigraph.xml.orig
         become: true
@@ -630,6 +632,8 @@
         template: src=templates/dns_config.j2
                   dest=/tmp/dns_config.json
         become: true
+      
+      - debug: msg="topo={{ topo }} port_index_map={{ port_index_map | default({}) }}"
 
       - name: Generate golden_config_db.json
         generate_golden_config_db:

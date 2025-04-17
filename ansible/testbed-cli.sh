@@ -288,7 +288,7 @@ function add_topo
   passwd=$2
   shift
   shift
-  echo "Deploying topology for testbed '${testbed_name}'"
+  echo "Deploying topology for testbed '${testbed_name}' in '${tbfile}'"
 
   read_file ${testbed_name}
 
@@ -314,6 +314,9 @@ function add_topo
       ansible_options+=" -e dut_interfaces=$dut_interfaces"
     fi
 
+    # ansible-playbook -i veos_vtb -i veos_vtb testbed_add_vm_topology.yml --vault-password-file=password.txt 
+    # -l server_1 -e testbed_name=vms-kvm-t0  -e duts_name=vlab-01 -e VM_base=VM0100 -e ptf_ip=10.250.0.102/24 -e topo=t0 
+    # -e vm_set_name=vms6-1 -e ptf_imagename=docker-ptf -e vm_type=ceos -e ptf_ipv6=fec0::ffff:afa:2/64 -e ptf_extra_mgmt_ip= -e netns_mgmt_ip=
     ANSIBLE_SCP_IF_SSH=y ansible-playbook -i $vmfile -i ${inv_name} testbed_add_vm_topology.yml --vault-password-file="${passwd}" -l "$server" \
           -e testbed_name="$testbed_name" -e duts_name="$duts" -e VM_base="$vm_base" \
           -e ptf_ip="$ptf_ip" -e topo="$topo" -e vm_set_name="$vm_set_name" \
@@ -564,7 +567,14 @@ function deploy_minigraph
 
   read_file $testbed_name
 
-  ansible-playbook -i "$inventory" config_sonic_basedon_testbed.yml --vault-password-file="$passfile" -l "$duts" -e testbed_name="$testbed_name" -e testbed_file=$tbfile -e vm_file=$vmfile -e deploy=true -e save=true $@
+  set -x
+  # ansible-playbook -i veos_vtb -i veos_vtb testbed_add_vm_topology.yml --vault-password-file=password.txt 
+  # -l server_1 -e testbed_name=vms-kvm-t0  -e duts_name=vlab-01 -e VM_base=VM0100 -e ptf_ip=10.250.0.102/24 -e topo=t0 
+  # -e vm_set_name=vms6-1 -e ptf_imagename=docker-ptf -e vm_type=ceos -e ptf_ipv6=fec0::ffff:afa:2/64 -e ptf_extra_mgmt_ip= -e netns_mgmt_ip=
+
+  # ansible-playbook -i veos_vtb config_sonic_basedon_testbed.yml --vault-password-file=password.txt 
+  # -l vlab-01 -e testbed_name=vms-kvm-t0 -e testbed_file=vtestbed.yaml -e vm_file=veos_vtb -e deploy=true -e save=true
+  ansible-playbook -vvv -i "$inventory" config_sonic_basedon_testbed.yml --vault-password-file="$passfile" -l "$duts" -e testbed_name="$testbed_name" -e testbed_file=$tbfile -e vm_file=$vmfile -e deploy=true -e save=true $@
 
   echo Done
 }
