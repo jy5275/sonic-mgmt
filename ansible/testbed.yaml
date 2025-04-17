@@ -266,3 +266,13 @@
   inv_name: lab
   auto_recover: 'True'
   comment: Multi servers testbed demo
+
+- conf-name: ubuntu-sonic-demo
+  group-name: vms1-3
+  topo: t0
+  dut:
+    - str-S5232-01
+    - str-S5232-02
+  inv_name: lab
+  auto_recover: 'True'
+  comment: Multi servers testbed demo

@@ -47,3 +47,7 @@ sonic_latest:
       ansible_host: 10.0.0.104
       sonic_version: v2
       sonic_hwsku: ACS-MSN2700
+    str-S5232-01:
+      ansible_host: 10.240.36.50
+    str-S5232-02:
+      ansible_host: 10.240.36.51
