@@ -574,7 +574,7 @@ function deploy_minigraph
 
   # ansible-playbook -i veos_vtb config_sonic_basedon_testbed.yml --vault-password-file=password.txt 
   # -l vlab-01 -e testbed_name=vms-kvm-t0 -e testbed_file=vtestbed.yaml -e vm_file=veos_vtb -e deploy=true -e save=true
-  ansible-playbook -vvv -i "$inventory" config_sonic_basedon_testbed.yml --vault-password-file="$passfile" -l "$duts" -e testbed_name="$testbed_name" -e testbed_file=$tbfile -e vm_file=$vmfile -e deploy=true -e save=true $@
+  ansible-playbook -i "$inventory" config_sonic_basedon_testbed.yml --vault-password-file="$passfile" -l "$duts" -e testbed_name="$testbed_name" -e testbed_file=$tbfile -e vm_file=$vmfile -e deploy=true -e save=true $@
 
   echo Done
 }
