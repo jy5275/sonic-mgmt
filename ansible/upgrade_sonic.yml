@@ -1,12 +1,21 @@
-# Example usage:
+# Usage in CI/CD:
+#   ansible-playbook upgrade_sonic.yml -i inventory \
+#    -e testbed_name=ubuntu-sonic-demo \
+#    -e testbed_file=testbed.yaml \
+#    -e upgrade_type=onie \
+#    -e image_url=http://16.162.34.49:8080/sonic-broadcom.bin
+# BMC console: ipmitool -H 10.240.36.151 -U admin -P admin -I lanplus sol activate
+# connect by console server: telnet 10.240.35.133 7011 # admin/1Nsecure!
+# grub-editenv: sudo grub-editenv /host/grub/grubenv set next_entry=ONIE
+# Quick reinstall: onie-nos-install http://16.162.34.49:8080/sonic-broadcom.bin
 #
+##########################################################################################
 # upgrade via sonic2sonic upgrade:
 #   ansible-playbook upgrade_sonic.yml -i lab -l devicename -e "upgrade_type=sonic" -e "image_url='http://8.8.8.8/sonic-broadcom.bin'"
 # upgrade via onie:
 #   ansible-playbook upgrade_sonic.yml -i lab -l devicename -e "upgrade_type=onie" -e "image_url='http://8.8.8.8/sonic-broadcom.bin'"
 # upgrade DUTs listed in testbed
-#   ansible-playbook upgrade-sonic.yaml -i lab -e "testbed_name=vms1-1" -e "testbed_file=testbed.csv" -e "upgrade_type=onie" -e "image_url='http://8.8.8.8/sonic-broadcom.bin'"
-- hosts: all
+- hosts: str-S5232-02
   gather_facts: no
   tasks:
 
@@ -82,6 +91,11 @@
         - name: Install SONiC image in ONIE
           action: onie install=yes url={{ image_url }}
           connection: onie
+          vars:
+            - ansible_connection: onie
+
+        - name: Waiting 5 min for installation process
+          pause: seconds=300
 
       when: upgrade_type == "onie"
 
@@ -95,7 +109,7 @@
     # Increase this time during deploying minigraph
     - name: Reset sshd timeout
       become: True
-      shell: sed -i "s/^ClientAliveInterval [0-9].*/ClientAliveInterval 900/g" /etc/ssh/sshd_config && systemctl restart sshd
+      shell: sed -i "s/^ClientAliveInterval [0-9].*/ClientAliveInterval 900/g" /etc/ssh/sshd_config && systemctl restart ssh
 
     - block:
         - fail: msg="image_url is not defined"
