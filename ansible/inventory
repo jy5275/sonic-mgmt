@@ -49,5 +49,13 @@ sonic_latest:
       sonic_hwsku: ACS-MSN2700
     str-S5232-01:
       ansible_host: 10.240.36.50
+      ansible_password: YourPaSsWoRd
+      ansible_user: admin
+      ansible_ssh_user: admin
+      ansible_altpassword: YourPaSsWoRd
     str-S5232-02:
       ansible_host: 10.240.36.51
+      ansible_password: YourPaSsWoRd
+      ansible_user: admin
+      ansible_ssh_user: admin
+      ansible_altpassword: YourPaSsWoRd
