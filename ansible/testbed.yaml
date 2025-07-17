@@ -273,6 +273,6 @@
   dut:
     - str-S5232-01
     - str-S5232-02
-  inv_name: lab
+  inv_name: inventory
   auto_recover: 'True'
-  comment: Multi servers testbed demo
+  comment: Toronto Lab testbed

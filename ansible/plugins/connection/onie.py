@@ -32,6 +32,7 @@ class Connection(ConnectionBase):
 
     def _build_command(self):
         self._ssh_command = ['ssh', '-tt', '-q']
+        C.ANSIBLE_SSH_ARGS = None
         ansible_ssh_args = C.ANSIBLE_SSH_ARGS
         if ansible_ssh_args:
             self._ssh_command += shlex.split(ansible_ssh_args)
@@ -78,11 +79,12 @@ class Connection(ConnectionBase):
 
         prompts = ["ONIE:.+ #", pexpect.EOF]
 
-        stdout = ""
+        stdout = b""
         if self.template:
             cmds = self.template.split('\n')
         else:
             cmds = []
+        self._display.vvv('jyjy::cmds=%s.' % (cmds), host=self.host)
         for cmd in cmds:
             self._display.vvv('> %s' % (cmd), host=self.host)
             client.sendline(cmd)
@@ -117,7 +119,7 @@ class Connection(ConnectionBase):
             stdout += client.before
             self._display.vvv("ONIE Rebooted. %s" % stdout, host=self.host)
 
-        return stdout
+        return bytes.decode(stdout)
 
     def put_file(self, in_path, out_path):
         pass
