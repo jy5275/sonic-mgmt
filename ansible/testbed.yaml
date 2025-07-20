@@ -271,7 +271,6 @@
   group-name: vms1-3
   topo: t0
   dut:
-    - str-S5232-01
     - str-S5232-02
   inv_name: inventory
   auto_recover: 'True'
