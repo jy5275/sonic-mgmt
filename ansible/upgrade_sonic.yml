@@ -94,9 +94,6 @@
           vars:
             - ansible_connection: onie
 
-        - name: Waiting 5 min for installation process
-          pause: seconds=300
-
       when: upgrade_type == "onie"
 
     - name: define disk_used_pcent if not defined
